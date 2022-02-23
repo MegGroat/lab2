@@ -1,0 +1,82 @@
+---
+title: 'Homework #4'
+author: "Megan Groathouse"
+date: "2/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(devtools)
+library(ggplot2)
+```
+
+
+```{r}
+choco <- read.csv("https://ds202-at-isu.github.io/labs/data/choco.csv")
+head(choco)
+```
+```{r}
+summary(choco)
+names(choco)
+```
+
+1. 1,852 chocolate bars were rated
+
+```{r}
+ggplot(choco, aes(x=Review.Date)) +
+           geom_bar()
+```
+
+
+2. The number of chocolate bars reviewed continued to rise year by year and peaked in 2015 (nearly 300 chocolate bars were reviewed that year), then it drastically dropped off in 2017.
+
+
+```{r}
+ggplot(choco, aes(x= Rating)) + geom_histogram(fill = "blue", bins=30)
+#View(table(choco$Rating))
+```
+3. The Histogram above shows that the ratings are distributed in a Normal curve. Most ratings fall between 2 and 4. With 3-3.5 being the most common ratings given. There are outliers. 4 chocolate bars recieved a 1 rating and 2 chocolate bars recieved a 5 rating. It is extremely unlikely for a chocolate bar to recieve a 1 or a 5 rating.
+
+```{r}
+ggplot(choco, aes(x= Cocoa.Pct, y= Rating)) + geom_point()
+```
+
+4. The plot above shows each rating has chocolate bars that mainly have a cocoa percentage that falls between 60% and 90%. Chocolate bars that are 100% Cocoa have never received a rating above 3.5. Based on this data, if a chocolate bar falls between 60% and 90% cocoa, you will probably earn a rating in between 2 and 4.
+
+```{r}
+choco1 = dplyr::filter(choco, Company.Location %in% c("U.S.A.", "France", "Canada"))
+ggplot(choco1, aes(Rating, fill=Company.Location)) + geom_bar()
+```
+
+
+5. Canada, France, and the United States all have ratings that are distributed in a normal curve. All three locations have the most ratings in between 3.25 and 3.75.
+
+
+```{r}
+#View(table(choco$Company))
+#View(table(choco$Bean.Type))
+
+choco2 = dplyr::filter(choco, Company %in% c("Arete", "Domori", "Guittard", "Valrhona", "A. Morin", "Pralus", "Fresco", "Bonnat", "Soma"))
+choco3 = dplyr::filter(choco, Bean.Type %in% c("Trinitario", "Criollo", "Forastero", "Forastero (Nacional)", "Blend", "Criollo, Trinitario", "Forastero (Arriba)"))
+```
+
+```{r}
+ggplot(choco2, aes(Company, fill=Bean.Type)) + geom_bar()
+```
+
+
+```{r}
+ggplot(choco2, aes(Rating, fill=Bean.Type)) + geom_bar()
+```
+
+
+```{r}
+ggplot(choco3, aes(Rating, fill=Bean.Type)) + geom_bar()
+```
+6. My question: Do companies use a wide variety of bean types? Is there a certain bean type that is most commonly used? Does a certain bean type get higher ratings than others?
+Answer: The first thing I did was create a subset of the data that only included data from the companies that had the most ratings. This helped more easily put the data into a graph. I then created a bar graph that showed each of the 9 remaining companies in the dataset and what beans they used. This graph showed me that each company used a wide variety of beans. I then created a bar graph using the subset of data that showed the Ratings and how often a bean earned the different ratings. This graph showed me that no bean earned better ratings than any other bean. All the beans had ratings that followed a Normal curve, with the peak being around 3.5. Finally, I decided I wanted to create a graph that included data from every company, but not of every bean. I created a new subset of data that was filtered to only how data of the top 7 most commonly used beans. I created a bar graph that sorted the beans by rating. This gave me the same conclusion that there is not a specific bean that earns better ratings than others.
+Conclusion: Companies use a wide variety of Bean Types, the Trinitario Bean is by far the most commonly used bean type, and there is no bean type that tends to get higher ratings than others.
